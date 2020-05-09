@@ -1,0 +1,19 @@
+{
+    "author": "get-a-clue",
+    "name": "EKI Google Translator all on one",
+    "manifest_version": 2,
+    "description": "Chrome plugin for translating text from Estonian with EKI and Google by sliding mouse",
+    "version": "1.0.0",
+    "icons": {
+      "16": "ico/icon-16.png",
+      "32": "ico/icon-32.png",
+      "128": "ico/icon-128.png"
+    },
+    "content_scripts": [{
+        "matches": ["http://*/*", "https://*/*", "ftp://*/*", "file:///*"],
+        "js": ["index.js"],
+        "css": ["translator.css"],
+        "run_at" : "document_end",
+        "all_frames" : true
+    }]
+}
