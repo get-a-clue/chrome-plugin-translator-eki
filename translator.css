@@ -19,8 +19,6 @@ translator {
     line-height: 22px;
     animation: translator_show .2s ease;
     border: 1px solid;
-    resize: both;
-    overflow: auto;
 }
 
 .closeBtn {

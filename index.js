@@ -66,6 +66,33 @@
         return result;
     }
 
+    function getSelectionPosition() {
+        const markerTextChar = "\ufeff";
+        const markerId = "sel_" + new Date().getTime() + "_" + Math.random().toString().substr(2);
+
+        let sel = window.getSelection();
+        let range = sel.getRangeAt(0).cloneRange();
+        range.collapse(false);
+
+        // Create the marker element containing a single invisible character using DOM methods and insert it
+        let markerEl = window.document.createElement("span");
+        markerEl.id = markerId;
+        markerEl.appendChild(window.document.createTextNode(markerTextChar));
+        range.insertNode(markerEl);
+
+        let left = Math.floor(markerEl.getBoundingClientRect().left);
+        let top = Math.floor(markerEl.getBoundingClientRect().top);
+        let bottom = Math.floor(markerEl.getBoundingClientRect().bottom);
+
+        markerEl.parentNode.removeChild(markerEl);
+
+        return {
+            left: left,
+            top: top,
+            bottom: bottom
+        }
+    }
+
     document.onkeyup = e => {
 
         (e.key === 'q' || e.key === 'Q') && (() => {
@@ -80,12 +107,19 @@
                 old[0].parentNode.removeChild(old[0])
             }
 
+            const popupPosition = getSelectionPosition();
+            console.log("selection position: " + JSON.stringify(popupPosition));
+
             const tk = calculateFreeGoogleTranslateToken(textToTranslate);
             const url = getGoogleTranslateUrl("et", "ru", textToTranslate, tk);
             const finalUrl = CORS_ANYWHERE + url;
 
-            const translator = document.createElement('translator')
-            document.body.appendChild(translator)
+            const translator = document.createElement('translator');
+            translator.onclick = () => {
+                document.getElementsByTagName('translator')[0].style.display = "none";
+            };
+            document.body.appendChild(translator);
+            translator.style.top = popupPosition.bottom + 4 + "px";
 
             const btn = '<a href="javascript:void(0)" class="closeBtn" onclick="document.getElementsByTagName(\'translator\')[0].style.display = \'none\';">×</a>';
             translator.innerHTML = btn + "...please wait";
@@ -98,7 +132,7 @@
                     const parsed = parseGoogleTranslateResult(text);
                     console.log(parsed.text);
 
-                    translator.innerHTML = btn + parsed.text;
+                    translator.innerHTML = parsed.text;
                     translator.style.backgroundColor = "#f4f4d7";
                 })
                 .catch(function(error) {
@@ -110,20 +144,16 @@
 
         (e.key === 'e' || e.key === 'E') && (() => {
 
-            let text = window.getSelection().toString()
-
+            let text = window.getSelection().toString();
             if (!text) {
                 return
             }
 
-            var w = window.innerWidth;
-            var h = window.innerHeight;
+            const width = (window.innerWidth / 3);
+            const height = (window.innerHeight / 6) * 5;
+            const left = ((window.innerWidth * 2) / 3);
 
-            var width = (w / 3);
-            var height = (h / 6) * 5;
-            var left = ((w * 2) / 3);
-
-            let params = `scrollbars=yes,resizable=yes,status=no,location=no,toolbar=no,menubar=no,
+            const params = `scrollbars=yes,resizable=yes,status=no,location=no,toolbar=no,menubar=no,
 width=${width},height=${height},left=${left},top=70`;
 
             open(`https://www.eki.ee/dict/evs/index.cgi?Q=${text}`, 'test', params);
