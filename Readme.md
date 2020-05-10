@@ -2,7 +2,7 @@
 
 Estonian is one of most difficult European language. This Chrome Plugin is intended for helping learning Estonian by reading and translating text from Estonian. There are some obstacles while studying:
 - Google translate can understand a meaning in overrall but sometimes it is not enough
-- Offical Estonian dictionary (developed by [EKI](https://portaal.eki.ee) or "Eesti Keel Instituut") is essential tool for studying Estonian.
+- Offical Estonian dictionary (developed by [EKI](https://portaal.eki.ee) or "Eesti Keele Instituut") is essential tool for studying Estonian.
 
 So, the aim of this Chrome plugin - is to integrate two tools into single one and make it simple to display translation from Google and lookup a word from EKI source.
 
